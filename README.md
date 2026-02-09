@@ -22,33 +22,41 @@
 
 ```
 DyMixOp/
-├── main.py                 # Main entry point for training and inference
-├── Trainer.py              # Training loop and optimization
-├── Evaluator.py            # Model evaluation and metrics
-├── Preprocessor.py         # Data loading and preprocessing
-├── Visualizer.py           # Visualization utilities
-├── Loss.py                 # Loss functions
-├── utils.py                # Utility functions
-├── Models/                 # Neural operator implementations
-│   ├── DyMixOp.py          # DyMixOp model (1D, 2D, 3D)
-│   ├── FNO.py              # Fourier Neural Operator
-│   ├── UNO.py              # U-shaped Neural Operator
-│   ├── DeepONet.py         # Deep Operator Network
-│   ├── GNOT.py             # General Neural Operator Transformer
-│   ├── LaMO.py             # Latent Mapping Operator
-│   ├── LocalNO.py          # Local Neural Operator
-│   ├── CoDANO.py           # Convolutional Domain-Agnostic NO
-│   └── ConvLSTM.py         # Convolutional LSTM
-├── Configs/                # Configuration files for different datasets
-│   ├── config_1dks.json         # 1D Kuramoto-Sivashinsky
-│   ├── config_2dburgers.json    # 2D Burgers equation
-│   ├── config_2dce-crp.json     # 2D Convection-Enhanced CRP
-│   ├── config_2ddarcy.json      # 2D Darcy flow
-│   ├── config_2dns.json         # 2D Navier-Stokes
-│   ├── config_3dbrusselator.json # 3D Brusselator
-│   └── config_3dsw.json         # 3D Shallow Water
-├── DataGeneration/         # Scripts for generating datasets
-└── Datasets/               # Dataset directory
+├── DyMixOp/
+│   ├── main.py                 # Main entry point for training and inference
+│   ├── Trainer.py              # Training loop and optimization
+│   ├── Evaluator.py            # Model evaluation and metrics
+│   ├── Preprocessor.py         # Data loading and preprocessing
+│   ├── Visualizer.py           # Visualization utilities
+│   ├── Loss.py                 # Loss functions
+│   ├── utils.py                # Utility functions
+│   ├── Models/                 # Neural operator implementations
+│   │   ├── DyMixOp.py          # DyMixOp model (1D, 2D, 3D)
+│   │   ├── FNO.py              # Fourier Neural Operator
+│   │   ├── UNO.py              # U-shaped Neural Operator
+│   │   ├── DeepONet.py         # Deep Operator Network
+│   │   ├── GNOT.py             # General Neural Operator Transformer
+│   │   ├── LaMO.py             # Latent Mapping Operator
+│   │   ├── LaMO_utils.py       # LaMO utility functions
+│   │   ├── LocalNO.py          # Local Neural Operator
+│   │   ├── CoDANO.py           # Convolutional Domain-Agnostic NO
+│   │   └── ConvLSTM.py         # Convolutional LSTM
+│   ├── Configs/                # Configuration files organized by baseline
+│   │   ├── README.md           # Configuration structure documentation
+│   │   └── {baseline}/         # DyMixOp, FNO, UNO, etc.
+│   │       ├── Base/           # Canonical configurations
+│   │       └── Variants/       # Size/hyperparameter variants
+│   ├── DataGeneration/         # Scripts for generating datasets
+│   │   ├── 1dKS_generation.m        # 1D Kuramoto-Sivashinsky
+│   │   ├── 2dBurgers_generation.m   # 2D Burgers equation
+│   │   ├── 2dNS_generation.m        # 2D Navier-Stokes
+│   │   ├── 3dsw_generation.py       # 3D Shallow Water generation
+│   │   └── 3dsw_dataprocess.py      # 3D Shallow Water processing
+│   └── Datasets/               # Dataset directory
+├── assets/                     # Images and animations
+├── environment-minimal.yml     # Conda environment specification
+├── LICENSE                     # MIT License
+└── README.md                   # Project documentation
 ```
 
 ## 🚀 Installation
@@ -76,7 +84,7 @@ conda activate neuralop
 ```bash
 cd DyMixOp
 
-python main.py --config Configs/Base/config_2dns_DyMixOp.json
+python main.py --config Configs/DyMixOp/Base/config_2dns_DyMixOp.json
 # Training only (set "train": true, "inference": false, "visualize": false in config)
 # Inference only (set "train": false, "inference": true, "visualize": false in config)
 # Visualize only (set "train": false, "inference": false, "visualize": true in config)
@@ -149,8 +157,11 @@ All hyperparameters are controlled via JSON configuration files. Key sections in
 
 | Argument | Description | Default |
 |----------|-------------|---------|
-| `--config` | Path to configuration file | `Configs/Base/config_2dns_DyMixOp.json` |
+| `--config` | Path to configuration file | `Configs/DyMixOp/Base/config_2dns_DyMixOp.json` |
 | `--physical_gpu_id` | GPU ID for logging | `0` |
+
+> [!NOTE]
+> Configuration files are organized by baseline model. See [Configs/README.md](DyMixOp/Configs/README.md) for detailed structure and parameter explanations.
 
 ## 🧠 Model Architecture
 
@@ -238,29 +249,23 @@ class CustomModel(nn.Module):
 
 ## 🎬 Visualization
 
-Animated comparisons of model predictions across different benchmarks. Each animation shows ground truth evolution alongside predictions from multiple baseline models, with real-time error tracking.
+Animated comparisons of model predictions across different benchmarks showing ground truth evolution alongside predictions from multiple baseline models with real-time error tracking.
 
-<p align="center"><b>1D Kuramoto-Sivashinsky (1 channel: scalar <i>u</i>)</b></p>
-<p align="center"><img src="assets/1dKS_Animation_Batch_0_Channel_0.gif" width="800"></p>
+| 1D Kuramoto-Sivashinsky<br>*(1 channel: u)* | 2D Burgers - Channel u<br>*(velocity u)* |
+|:--:|:--:|
+| ![1dKS](assets/1dKS_Animation_Batch_0_Channel_0.gif) | ![2dB_u](assets/2dBurgers_Animation_Batch_-1_Channel_0.gif) |
+| **2D Burgers - Channel v**<br>*(velocity v)* | **2D Navier-Stokes**<br>*(vorticity ω)* |
+| ![2dB_v](assets/2dBurgers_Animation_Batch_-1_Channel_1.gif) | ![2dNS](assets/2dNS_Animation_Batch_-1_Channel_0.gif) |
+| **3D Shallow Water - Height**<br>*(height h)* | **3D Shallow Water - Vorticity**<br>*(vorticity ω)* |
+| ![3dSW_h](assets/3dSW_Animation_Batch_-1_Channel_0.gif) | ![3dSW_omega](assets/3dSW_Animation_Batch_-1_Channel_1.gif) |
+| **2D CE-CRP - Density**<br>*(ρ)* | **2D CE-CRP - Velocity u**<br>*(u)* |
+| ![CRP_rho](assets/2dCE-CRP_Animation_Batch_0_Channel_0.gif) | ![CRP_u](assets/2dCE-CRP_Animation_Batch_0_Channel_1.gif) |
+| **2D CE-CRP - Velocity v**<br>*(v)* | **2D CE-CRP - Pressure**<br>*(p)* |
+| ![CRP_v](assets/2dCE-CRP_Animation_Batch_0_Channel_2.gif) | ![CRP_p](assets/2dCE-CRP_Animation_Batch_0_Channel_3.gif) |
+| **2D CE-CRP - Energy**<br>*(E)* | |
+| ![CRP_E](assets/2dCE-CRP_Animation_Batch_0_Channel_4.gif) | |
 
-<p align="center"><b>2D Burgers (2 channels: velocity <i>u</i>, velocity <i>v</i>)</b></p>
-<p align="center"><img src="assets/2dBurgers_Animation_Batch_-1_Channel_0.gif" width="800"></p>
-<p align="center"><img src="assets/2dBurgers_Animation_Batch_-1_Channel_1.gif" width="800"></p>
-
-<p align="center"><b>2D Navier-Stokes (1 channels: vorticity &omega;) </b></p>
-<p align="center"><img src="assets/2dNS_Animation_Batch_-1_Channel_0.gif" width="800"></p>
-
-<p align="center"><b>3D Shallow Water (Sphere, 2 channels: height <i>h</i>, vorticity &omega;)</b></p>
-<p align="center"><img src="assets/3dSW_Animation_Batch_-1_Channel_0.gif" width="800"></p>
-<p align="center"><i>*Note: The baseline 'LaMO' is excluded from this visualization due to significant deviation that would distort the comparative scale.</i></p>
-<p align="center"><img src="assets/3dSW_Animation_Batch_-1_Channel_1.gif" width="800"></p>
-
-<p align="center"><b>2D CE-CRP</b> (5 channels: density &rho;, velocity <i>u</i>, velocity <i>v</i>, pressure <i>p</i>, energy <i>E</i>)</p>
-<p align="center"><img src="assets/2dCE-CRP_Animation_Batch_0_Channel_0.gif" width="800"></p>
-<p align="center"><img src="assets/2dCE-CRP_Animation_Batch_0_Channel_1.gif" width="800"></p>
-<p align="center"><img src="assets/2dCE-CRP_Animation_Batch_0_Channel_2.gif" width="800"></p>
-<p align="center"><img src="assets/2dCE-CRP_Animation_Batch_0_Channel_3.gif" width="800"></p>
-<p align="center"><img src="assets/2dCE-CRP_Animation_Batch_0_Channel_4.gif" width="800"></p>
+<p align="center"><i>Note: LaMO baseline excluded from the height in 3D Shallow Water visualization due to scale mismatch</i></p>
 
 ## 📈 Results
 
