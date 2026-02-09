@@ -251,18 +251,18 @@ class CustomModel(nn.Module):
 
 Animated comparisons of model predictions across different benchmarks showing ground truth evolution alongside predictions from multiple baseline models with real-time error tracking.
 
-| 1D Kuramoto-Sivashinsky<br>*(1 channel: u)* | 2D Burgers - Channel u<br>*(velocity u)* |
+| **1D Kuramoto-Sivashinsky**<br>*(scalar u)* | **2D Burgers**<br>*(velocity u)* |
 |:--:|:--:|
 | ![1dKS](assets/1dKS_Animation_Batch_0_Channel_0.gif) | ![2dB_u](assets/2dBurgers_Animation_Batch_-1_Channel_0.gif) |
-| **2D Burgers - Channel v**<br>*(velocity v)* | **2D Navier-Stokes**<br>*(vorticity ω)* |
+| **2D Burgers**<br>*(velocity v)* | **2D Navier-Stokes**<br>*(vorticity ω)* |
 | ![2dB_v](assets/2dBurgers_Animation_Batch_-1_Channel_1.gif) | ![2dNS](assets/2dNS_Animation_Batch_-1_Channel_0.gif) |
-| **3D Shallow Water - Height**<br>*(height h)* | **3D Shallow Water - Vorticity**<br>*(vorticity ω)* |
+| **3D Shallow Water**<br>*(height h)* | **3D Shallow Water**<br>*(vorticity ω)* |
 | ![3dSW_h](assets/3dSW_Animation_Batch_-1_Channel_0.gif) | ![3dSW_omega](assets/3dSW_Animation_Batch_-1_Channel_1.gif) |
-| **2D CE-CRP - Density**<br>*(ρ)* | **2D CE-CRP - Velocity u**<br>*(u)* |
+| **2D CE-CRP**<br>*(density ρ)* | **2D CE-CRP**<br>*(velocity u)* |
 | ![CRP_rho](assets/2dCE-CRP_Animation_Batch_0_Channel_0.gif) | ![CRP_u](assets/2dCE-CRP_Animation_Batch_0_Channel_1.gif) |
-| **2D CE-CRP - Velocity v**<br>*(v)* | **2D CE-CRP - Pressure**<br>*(p)* |
+| **2D CE-CRP**<br>*(velocity v)* | **2D CE-CRP**<br>*(pressure p)* |
 | ![CRP_v](assets/2dCE-CRP_Animation_Batch_0_Channel_2.gif) | ![CRP_p](assets/2dCE-CRP_Animation_Batch_0_Channel_3.gif) |
-| **2D CE-CRP - Energy**<br>*(E)* | |
+| **2D CE-CRP**<br>*(energy E)* | |
 | ![CRP_E](assets/2dCE-CRP_Animation_Batch_0_Channel_4.gif) | |
 
 <p align="center"><i>Note: LaMO baseline excluded from the height in 3D Shallow Water visualization due to scale mismatch</i></p>
